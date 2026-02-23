@@ -78,7 +78,7 @@ fun BackGroundImage(message: String, modifier: Modifier = Modifier) {
             alpha = 0.5F
         )
         HeadText(
-            header = "Welcome",
+            header = message,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(8.dp)
