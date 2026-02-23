@@ -26,20 +26,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.timeapp.ui.theme.TimeAppTheme
-import androidx.compose.ui.text.googlefonts.GoogleFont
-import androidx.compose.ui.text.googlefonts.Font
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-
-val provider = GoogleFont.Provider(
-    providerAuthority = "com.google.android.gms.fonts",
-    providerPackage = "com.google.android.gms",
-    certificates = R.array.com_google_android_gms_fonts_certs
-)
-val myFont = GoogleFont("Lobster") // replace with any Google Font name
 val myFontFamily = FontFamily(
-    Font(R.font.CascadiaMono-Regular)
+    Font(R.font.cascadiamono_regular)
 )
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,7 +57,7 @@ fun HeadText(header: String, modifier: Modifier = Modifier) {
     ){
     Spacer(modifier = Modifier.fillMaxHeight(0.25f))
         Text(
-            text = "Welcome",
+            text = "welcome",
             fontFamily = myFontFamily,
             fontSize = 60.sp,
             lineHeight = 80.sp,
