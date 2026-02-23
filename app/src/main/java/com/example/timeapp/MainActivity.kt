@@ -86,10 +86,3 @@ fun BackGroundImage(message: String, modifier: Modifier = Modifier) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    TimeAppTheme {
-        HeadText("Android")
-    }
-}
