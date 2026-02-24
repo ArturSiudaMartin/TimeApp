@@ -43,15 +43,15 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    BackGroundImage(message = GetTime())
-                    BackGroundImage(message = GetDate())
+                    BackGroundImage(message = GetTime(), 60.0)
+                    BackGroundImage(message = GetDate(), 15.0)
                 }
         }
     }
 }
 
 @Composable
-fun HeadText(header: String, modifier: Modifier = Modifier) {
+fun HeadText(header: String, height: Double, modifier: Modifier = Modifier) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.fillMaxHeight()
@@ -63,13 +63,13 @@ fun HeadText(header: String, modifier: Modifier = Modifier) {
             fontSize = 30.sp,
             lineHeight = 50.sp,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(top = 30.dp)
+            modifier = Modifier.padding(top = height.dp)
         )
     }
 }
 
 @Composable
-fun BackGroundImage(message: String, modifier: Modifier = Modifier) {
+fun BackGroundImage(message: String, height: Double, modifier: Modifier = Modifier) {
     // Create a box to overlap image and texts
     Box(modifier) {
         Image(
@@ -80,6 +80,7 @@ fun BackGroundImage(message: String, modifier: Modifier = Modifier) {
         )
         HeadText(
             header = message,
+            height = height,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(8.dp)
