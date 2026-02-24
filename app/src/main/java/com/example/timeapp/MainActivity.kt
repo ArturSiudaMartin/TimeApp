@@ -43,24 +43,24 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    BackGroundImage(message = GetTime(), 60.0)
-                    BackGroundImage(message = GetDate(), 15.0)
+                    BackGroundImage(message = GetDate(), 135.0, 30)
+                    BackGroundImage(message = GetTime(), 75.0, 45)
                 }
         }
     }
 }
 
 @Composable
-fun HeadText(header: String, height: Double, modifier: Modifier = Modifier) {
+fun HeadText(header: String, height: Double, fontSize: Int, modifier: Modifier = Modifier) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.fillMaxHeight()
     ){
-    Spacer(modifier = Modifier.fillMaxHeight(0.25f))
+    Spacer(modifier = Modifier.fillMaxHeight(0.0f))
         Text(
             text = header,
             fontFamily = myFontFamily,
-            fontSize = 30.sp,
+            fontSize = fontSize.sp,
             lineHeight = 50.sp,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(top = height.dp)
@@ -69,7 +69,7 @@ fun HeadText(header: String, height: Double, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun BackGroundImage(message: String, height: Double, modifier: Modifier = Modifier) {
+fun BackGroundImage(message: String, height: Double, fontSize :Int,  modifier: Modifier = Modifier) {
     // Create a box to overlap image and texts
     Box(modifier) {
         Image(
@@ -79,8 +79,9 @@ fun BackGroundImage(message: String, height: Double, modifier: Modifier = Modifi
             alpha = 0.5F
         )
         HeadText(
-            header = message,
-            height = height,
+            message,
+            height,
+            fontSize,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(8.dp)
@@ -96,7 +97,7 @@ fun GetTime():String
 }
     fun GetDate():String
     {
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
         val current = LocalDateTime.now().format(formatter)
         return current.format(formatter)
     }
