@@ -3,9 +3,7 @@ package com.example.timeapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,25 +11,30 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.timeapp.ui.theme.TimeAppTheme
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import kotlinx.coroutines.delay
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.graphics.Color
 
-val myFontFamily = FontFamily(
+val cascadiamono_regular_font = FontFamily(
     Font(R.font.cascadiamono_regular)
 )
 class MainActivity : ComponentActivity() {
@@ -42,16 +45,17 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
-                ) {
-                    BackGroundImage(message = GetDate(), 135.0, 30)
-                    BackGroundImage(message = GetTime(), 75.0, 45)
+                )
+                {
+                    //myText("welcome", 25.0, 80)
+                    LiveClock()
                 }
         }
     }
 }
 
 @Composable
-fun HeadText(header: String, height: Double, fontSize: Int, modifier: Modifier = Modifier) {
+fun myText(header: String, height: Double, fontSize: Int, font: FontFamily, modifier: Modifier = Modifier) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.fillMaxHeight()
@@ -59,7 +63,7 @@ fun HeadText(header: String, height: Double, fontSize: Int, modifier: Modifier =
     Spacer(modifier = Modifier.fillMaxHeight(0.0f))
         Text(
             text = header,
-            fontFamily = myFontFamily,
+            fontFamily = font,
             fontSize = fontSize.sp,
             lineHeight = 50.sp,
             textAlign = TextAlign.Center,
@@ -78,7 +82,7 @@ fun BackGroundImage(message: String, height: Double, fontSize :Int,  modifier: M
             contentScale = ContentScale.Crop,
             alpha = 0.5F
         )
-        HeadText(
+        /*myText(
             message,
             height,
             fontSize,
@@ -86,6 +90,7 @@ fun BackGroundImage(message: String, height: Double, fontSize :Int,  modifier: M
                 .fillMaxSize()
                 .padding(8.dp)
         )
+         */
     }
 }
 
@@ -95,11 +100,51 @@ fun GetTime():String
     val current = LocalDateTime.now().format(formatter)
     return current.format(formatter)
 }
-    fun GetDate():String
-    {
+fun GetDate():String
+{
         val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
         val current = LocalDateTime.now().format(formatter)
         return current.format(formatter)
     }
 
+@Composable
+fun LiveClock()
+{
+    var time by remember { mutableStateOf(GetTime()) }
+    var date by remember { mutableStateOf(GetDate()) }
+
+    LaunchedEffect(Unit)
+    {
+        while (true) {
+            time = GetTime()
+            date = GetDate()
+            delay(1000L) // update every second
+        }
+    }
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.dotted_black_bg),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            alpha = 0.5F,
+            modifier = Modifier.fillMaxSize()
+        )
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.TopCenter
+        ) {
+            myText(time, 75.0, 60, cascadiamono_regular_font)
+        }
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            myText(date, 135.0, 30,cascadiamono_regular_font)
+        }
+
+    }
+}
 }
