@@ -28,6 +28,9 @@ import androidx.compose.ui.unit.sp
 import com.example.timeapp.ui.theme.TimeAppTheme
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+
 val myFontFamily = FontFamily(
     Font(R.font.cascadiamono_regular)
 )
@@ -39,11 +42,8 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
-                ){
-                    BackGroundImage(
-                        message = "Android",
-                    )
-                }
+                ) {
+                    BackGroundImage(message = GetTime())
             }
         }
     }
@@ -57,10 +57,10 @@ fun HeadText(header: String, modifier: Modifier = Modifier) {
     ){
     Spacer(modifier = Modifier.fillMaxHeight(0.25f))
         Text(
-            text = "welcome",
+            text = header,
             fontFamily = myFontFamily,
-            fontSize = 60.sp,
-            lineHeight = 80.sp,
+            fontSize = 30.sp,
+            lineHeight = 50.sp,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(top = 30.dp)
         )
@@ -86,3 +86,11 @@ fun BackGroundImage(message: String, modifier: Modifier = Modifier) {
     }
 }
 
+fun GetTime():String
+{
+    val formatter = DateTimeFormatter.ofPattern("HH:mm yyyy-MM-dd ")
+    val current = LocalDateTime.now().format(formatter)
+    return current.format(formatter)
+}
+
+}
