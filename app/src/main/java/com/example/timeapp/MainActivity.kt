@@ -44,7 +44,8 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     BackGroundImage(message = GetTime())
-            }
+                    BackGroundImage(message = GetDate())
+                }
         }
     }
 }
@@ -88,9 +89,15 @@ fun BackGroundImage(message: String, modifier: Modifier = Modifier) {
 
 fun GetTime():String
 {
-    val formatter = DateTimeFormatter.ofPattern("HH:mm yyyy-MM-dd ")
+    val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
     val current = LocalDateTime.now().format(formatter)
     return current.format(formatter)
 }
+    fun GetDate():String
+    {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val current = LocalDateTime.now().format(formatter)
+        return current.format(formatter)
+    }
 
 }
