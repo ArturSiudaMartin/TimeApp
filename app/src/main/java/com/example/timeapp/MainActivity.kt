@@ -1,15 +1,20 @@
 package com.example.timeapp
 
+import android.R.attr.maxHeight
+import android.R.attr.maxWidth
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -32,11 +37,20 @@ import kotlinx.coroutines.delay
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import java.nio.file.Files.size
+import kotlin.coroutines.coroutineContext
 
 val cascadiamono_regular_font = FontFamily(
     Font(R.font.cascadiamono_regular)
 )
+
+val screenWidth = maxWidth
+val screenHeight = maxHeight
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +63,7 @@ class MainActivity : ComponentActivity() {
                 {
                     //myText("welcome", 25.0, 80)
                     LiveClock()
+                    LargeBoxDemo(1000f, 750f, -1f, 750f)
                 }
         }
     }
@@ -147,4 +162,28 @@ fun LiveClock()
 
     }
 }
+
+    @Composable
+fun LargeBoxDemo(boxHeight:Float, boxWidth: Float, xVal:Float, yVal:Float)
+{
+    BoxWithConstraints(modifier = Modifier.fillMaxSize())
+    {
+        val screenWidth = constraints.maxWidth.toFloat()
+        val screenHeight = constraints.maxHeight.toFloat()
+
+        var xVar = if (xVal < 0) screenWidth / 2 - boxWidth / 2 else xVal
+        var yVar = if (yVal < 0) screenHeight / 2 - boxHeight / 2 else yVal
+
+            Canvas(modifier = Modifier.fillMaxSize())
+        {
+            drawRoundRect(
+                color = Color.DarkGray,
+                topLeft = Offset(xVar, yVar),
+                size = Size(boxWidth,boxHeight),
+                cornerRadius = CornerRadius(50f)
+            )
+        }
+    }
+}
+
 }
