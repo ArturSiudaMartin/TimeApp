@@ -63,7 +63,7 @@ class MainActivity : ComponentActivity() {
                 {
                     //myText("welcome", 25.0, 80)
                     LiveClock()
-                    LargeBoxDemo(1000f, 750f, -1f, 750f)
+                    LargeBox(1000f, 750f, -1f, 750f)
                 }
         }
     }
@@ -164,7 +164,7 @@ fun LiveClock()
 }
 
     @Composable
-fun LargeBoxDemo(boxHeight:Float, boxWidth: Float, xVal:Float, yVal:Float)
+fun LargeBox(boxHeight:Float, boxWidth: Float, xVal:Float, yVal:Float)
 {
     BoxWithConstraints(modifier = Modifier.fillMaxSize())
     {
