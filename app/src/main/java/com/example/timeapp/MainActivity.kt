@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -41,9 +40,9 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import java.nio.file.Files.size
 import java.time.LocalDate
-import kotlin.coroutines.coroutineContext
+import java.time.Period
+import java.time.temporal.ChronoUnit
 
 val cascadiamono_regular_font = FontFamily(
     Font(R.font.cascadiamono_regular)
@@ -56,7 +55,8 @@ data class BoxConfig(
     var boxHeight: Float,  // var = mutable (has getter AND setter)
     var boxWidth: Float,
     var xVal: Float,
-    var yVal: Float
+    var yVal: Float,
+    var boxColor: Color
 )
 
 class MainActivity : ComponentActivity() {
@@ -71,8 +71,9 @@ class MainActivity : ComponentActivity() {
                 {
                     //myText("welcome", 25.0, 80)
                     LiveClock()
-                    val mainBox = BoxConfig(1000f, 750f, -1f, 750f)
+                    val mainBox = BoxConfig(1000f, 750f, -1f, 750f, Color.LightGray)
                     myBox(config = mainBox)
+                    updatingBox(mainBox)
                 }
         }
     }
@@ -176,20 +177,25 @@ fun LiveClock()
 
 }
 
-    /*@Composable
-fun updatingBox(boxHeight:Float, xVal:Float, yVal:Float)
+@Composable
+fun updatingBox(leadBox: BoxConfig)
 {
-    val current = LocalDate.now()
-    val startOfYear = LocalDate.of(current.year, 1, 1)
+    val myXVal = leadBox.xVal
+    val myWidth = leadBox.boxWidth
 
-    val timeDif = current.compareTo(startOfYear)
-    var height = timeDif +
+    val startOfYear = LocalDate.of(LocalDate.now().year, 1, 1)
+    var localDate = LocalDate.now()
 
+    var timeSinceStart = ChronoUnit.DAYS.between(startOfYear, localDate)
 
-    myBox(boxHeight, height,  xVal, yVal)
+    var myHeigth = (timeSinceStart/365f) * leadBox.boxHeight
+
+    var myYVal = leadBox.yVal + leadBox.boxHeight - myHeigth
+
+    val altBox = BoxConfig(myHeigth, myWidth, myXVal, myYVal, Color.White)
+    myBox(config = altBox)
 }
 
-     */
 
 @Composable
 fun myBox(config: BoxConfig) {
@@ -198,13 +204,15 @@ fun myBox(config: BoxConfig) {
         val screenWidth = constraints.maxWidth.toFloat()
         val screenHeight = constraints.maxHeight.toFloat()
 
+
+
         var xVar = if (config.xVal < 0) screenWidth / 2 - config.boxWidth / 2 else config.xVal
         var yVar = if (config.yVal < 0) screenHeight / 2 - config.boxHeight / 2 else config.yVal
 
         Canvas(modifier = Modifier.fillMaxSize())
         {
             drawRoundRect(
-                color = Color.DarkGray,
+                color = config.boxColor,
                 topLeft = Offset(xVar, yVar),
                 size = Size(config.boxWidth, config.boxHeight),
                 cornerRadius = CornerRadius(50f)
