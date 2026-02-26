@@ -69,6 +69,18 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 )
                 {
+                    Surface(
+                        modifier = Modifier.fillMaxSize(),
+                        color = MaterialTheme.colorScheme.background
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.dotted_black_bg),
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            alpha = 0.5F,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
                     //myText("welcome", 25.0, 80)
                     LiveClock()
                     val mainBox = BoxConfig(1000f, 750f, -1f, 750f, Color.LightGray)
@@ -146,17 +158,7 @@ fun LiveClock()
             delay(1000L) // update every second
         }
     }
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.dotted_black_bg),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            alpha = 0.5F,
-            modifier = Modifier.fillMaxSize()
-        )
+
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.TopCenter
@@ -171,10 +173,6 @@ fun LiveClock()
         }
 
     }
-}
-
-
-
 }
 
 @Composable
@@ -192,10 +190,10 @@ fun updatingBox(leadBox: BoxConfig)
 
     var myYVal = leadBox.yVal + leadBox.boxHeight - myHeigth
 
+
     val altBox = BoxConfig(myHeigth, myWidth, myXVal, myYVal, Color.White)
     myBox(config = altBox)
 }
-
 
 @Composable
 fun myBox(config: BoxConfig) {
