@@ -42,6 +42,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import java.nio.file.Files.size
+import java.time.LocalDate
 import kotlin.coroutines.coroutineContext
 
 val cascadiamono_regular_font = FontFamily(
@@ -164,26 +165,43 @@ fun LiveClock()
 }
 
     @Composable
-fun LargeBox(boxHeight:Float, boxWidth: Float, xVal:Float, yVal:Float)
-{
-    BoxWithConstraints(modifier = Modifier.fillMaxSize())
-    {
-        val screenWidth = constraints.maxWidth.toFloat()
-        val screenHeight = constraints.maxHeight.toFloat()
+fun LargeBox(boxHeight:Float, boxWidth: Float, xVal:Float, yVal:Float) {
+        BoxWithConstraints(modifier = Modifier.fillMaxSize())
+        {
+            val screenWidth = constraints.maxWidth.toFloat()
+            val screenHeight = constraints.maxHeight.toFloat()
 
-        var xVar = if (xVal < 0) screenWidth / 2 - boxWidth / 2 else xVal
-        var yVar = if (yVal < 0) screenHeight / 2 - boxHeight / 2 else yVal
+            var xVar = if (xVal < 0) screenWidth / 2 - boxWidth / 2 else xVal
+            var yVar = if (yVal < 0) screenHeight / 2 - boxHeight / 2 else yVal
 
             Canvas(modifier = Modifier.fillMaxSize())
-        {
-            drawRoundRect(
-                color = Color.DarkGray,
-                topLeft = Offset(xVar, yVar),
-                size = Size(boxWidth,boxHeight),
-                cornerRadius = CornerRadius(50f)
-            )
+            {
+                drawRoundRect(
+                    color = Color.DarkGray,
+                    topLeft = Offset(xVar, yVar),
+                    size = Size(boxWidth, boxHeight),
+                    cornerRadius = CornerRadius(50f)
+                )
+            }
         }
-    }
+
 }
+
+    /*@Composable
+fun updatingBox(boxHeight:Float, xVal:Float, yVal:Float)
+{
+    val current = LocalDate.now()
+    val startOfYear = LocalDate.of(current.year, 1, 1)
+
+    val timeDif = current.compareTo(startOfYear)
+    var height = timeDif +
+
+
+    LargeBox(boxHeight, height,  xVal, yVal)
+}
+
+     */
+
+
 
 }
