@@ -163,14 +163,16 @@ fun LiveClock()
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.TopCenter
         ) {
-            myText(time, 75.0, 60, cascadiamono_regular_font)
+            myText(time, 125.0, 60, cascadiamono_regular_font)
         }
-        Box(
+        /*Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
             myText(date, 135.0, 30,cascadiamono_regular_font)
         }
+
+         */
 
     }
 }
