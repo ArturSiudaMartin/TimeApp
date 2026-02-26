@@ -1,7 +1,5 @@
 package com.example.timeapp
 
-import android.R.attr.maxHeight
-import android.R.attr.maxWidth
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -21,7 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -40,16 +37,15 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import kotlinx.coroutines.isActive
 import java.time.LocalDate
-import java.time.Period
 import java.time.temporal.ChronoUnit
+import androidx.compose.runtime.setValue
 
 val cascadiamono_regular_font = FontFamily(
     Font(R.font.cascadiamono_regular)
 )
 
-val screenWidth = maxWidth
-val screenHeight = maxHeight
 
 data class BoxConfig(
     var boxHeight: Float,  // var = mutable (has getter AND setter)
@@ -82,44 +78,55 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     //myText("welcome", 25.0, 80)
-                    LiveClock()
+                    LiveClock(125.0, 60)
+                    LiveDate(650.0, 50)
                     val mainBox = BoxConfig(1000f, 750f, -1f, 750f, Color.LightGray)
                     myBox(config = mainBox)
                     updatingBox(mainBox)
+
                 }
+            }
         }
     }
-}
-
-@Composable
-fun myText(header: String, height: Double, fontSize: Int, font: FontFamily, modifier: Modifier = Modifier) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier.fillMaxHeight()
-    ){
-    Spacer(modifier = Modifier.fillMaxHeight(0.0f))
-        Text(
-            text = header,
-            fontFamily = font,
-            fontSize = fontSize.sp,
-            lineHeight = 50.sp,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(top = height.dp)
-        )
+    @Composable
+    fun myText(
+        header: String,
+        height: Double,
+        fontSize: Int,
+        font: FontFamily,
+        modifier: Modifier = Modifier
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = modifier.fillMaxHeight()
+        ) {
+            Spacer(modifier = Modifier.fillMaxHeight(0.0f))
+            Text(
+                text = header,
+                fontFamily = font,
+                fontSize = fontSize.sp,
+                lineHeight = 50.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(top = height.dp)
+            )
+        }
     }
-}
-
-@Composable
-fun BackGroundImage(message: String, height: Double, fontSize :Int,  modifier: Modifier = Modifier) {
-    // Create a box to overlap image and texts
-    Box(modifier) {
-        Image(
-            painter = painterResource(id = R.drawable.dotted_black_bg),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            alpha = 0.5F
-        )
-        /*myText(
+    @Composable
+    fun BackGroundImage(
+        message: String,
+        height: Double,
+        fontSize: Int,
+        modifier: Modifier = Modifier
+    ) {
+        // Create a box to overlap image and texts
+        Box(modifier) {
+            Image(
+                painter = painterResource(id = R.drawable.dotted_black_bg),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                alpha = 0.5F
+            )
+            /*myText(
             message,
             height,
             fontSize,
@@ -128,97 +135,97 @@ fun BackGroundImage(message: String, height: Double, fontSize :Int,  modifier: M
                 .padding(8.dp)
         )
          */
+        }
     }
-}
-
-fun GetTime():String
-{
-    val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
-    val current = LocalDateTime.now().format(formatter)
-    return current.format(formatter)
-}
-fun GetDate():String
-{
-        val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+    fun getTime(): String {
+        val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
         val current = LocalDateTime.now().format(formatter)
         return current.format(formatter)
     }
-
-@Composable
-fun LiveClock()
-{
-    var time by remember { mutableStateOf(GetTime()) }
-    var date by remember { mutableStateOf(GetDate()) }
-
-    LaunchedEffect(Unit)
-    {
-        while (true) {
-            time = GetTime()
-            date = GetDate()
-            delay(1000L) // update every second
-        }
+    fun getDate(): String {
+        val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+        return LocalDateTime.now().format(formatter)
     }
+    @Composable
+    fun LiveClock(myHeight: Double,myFontSize:Int) {
+        var time by remember { mutableStateOf(getTime()) }
+
+        LaunchedEffect(Unit)
+        {
+            while (isActive) {
+                time = getTime()
+                delay(1000L) // update every second
+            }
+        }
 
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.TopCenter
-        ) {
-            myText(time, 125.0, 60, cascadiamono_regular_font)
+        )
+        {
+            myText(time, myHeight, myFontSize, cascadiamono_regular_font)
         }
-        /*Box(
+
+
+    }
+    @Composable
+    fun LiveDate(myHeight: Double, myFontSize:Int) {
+
+        var date by remember { mutableStateOf(getDate()) }
+
+        LaunchedEffect(Unit) {
+            while (isActive) {
+                date = getDate()
+                delay(1000L)
+            }
+        }
+
+        Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            myText(date, 135.0, 30,cascadiamono_regular_font)
+            myText(date, myHeight, myFontSize, cascadiamono_regular_font)
         }
-
-         */
-
     }
-}
+    @Composable
+    fun updatingBox(leadBox: BoxConfig) {
+        val myXVal = leadBox.xVal
+        val myWidth = leadBox.boxWidth
 
-@Composable
-fun updatingBox(leadBox: BoxConfig)
-{
-    val myXVal = leadBox.xVal
-    val myWidth = leadBox.boxWidth
+        val startOfYear = LocalDate.of(LocalDate.now().year, 1, 1)
+        val localDate = LocalDate.now()
 
-    val startOfYear = LocalDate.of(LocalDate.now().year, 1, 1)
-    var localDate = LocalDate.now()
+        val timeSinceStart = ChronoUnit.DAYS.between(startOfYear, localDate)
 
-    var timeSinceStart = ChronoUnit.DAYS.between(startOfYear, localDate)
-
-    var myHeigth = (timeSinceStart/365f) * leadBox.boxHeight
-
-    var myYVal = leadBox.yVal + leadBox.boxHeight - myHeigth
-
-
-    val altBox = BoxConfig(myHeigth, myWidth, myXVal, myYVal, Color.White)
-    myBox(config = altBox)
-}
-
-@Composable
-fun myBox(config: BoxConfig) {
-    BoxWithConstraints(modifier = Modifier.fillMaxSize())
-    {
-        val screenWidth = constraints.maxWidth.toFloat()
-        val screenHeight = constraints.maxHeight.toFloat()
-
-
-
-        var xVar = if (config.xVal < 0) screenWidth / 2 - config.boxWidth / 2 else config.xVal
-        var yVar = if (config.yVal < 0) screenHeight / 2 - config.boxHeight / 2 else config.yVal
-
-        Canvas(modifier = Modifier.fillMaxSize())
+        val myHeigth = (timeSinceStart / 365f) * leadBox.boxHeight
+        
+        val myYVal = leadBox.yVal + leadBox.boxHeight - myHeigth
+        
+        val altBox = BoxConfig(myHeigth, myWidth, myXVal, myYVal, Color.White)
+        myBox(config = altBox)
+    }
+    @Composable
+    fun myBox(config: BoxConfig) {
+        BoxWithConstraints(modifier = Modifier.fillMaxSize())
         {
-            drawRoundRect(
-                color = config.boxColor,
-                topLeft = Offset(xVar, yVar),
-                size = Size(config.boxWidth, config.boxHeight),
-                cornerRadius = CornerRadius(50f)
-            )
+            val screenWidth = constraints.maxWidth.toFloat()
+            val screenHeight = constraints.maxHeight.toFloat()
+
+
+            var xVar = if (config.xVal < 0) screenWidth / 2 - config.boxWidth / 2 else config.xVal
+            var yVar = if (config.yVal < 0) screenHeight / 2 - config.boxHeight / 2 else config.yVal
+
+            Canvas(modifier = Modifier.fillMaxSize())
+            {
+                drawRoundRect(
+                    color = config.boxColor,
+                    topLeft = Offset(xVar, yVar),
+                    size = Size(config.boxWidth, config.boxHeight),
+                    cornerRadius = CornerRadius(50f)
+                )
+            }
         }
+
+
     }
-
-
 }
