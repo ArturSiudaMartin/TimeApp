@@ -52,6 +52,13 @@ val cascadiamono_regular_font = FontFamily(
 val screenWidth = maxWidth
 val screenHeight = maxHeight
 
+data class BoxConfig(
+    var boxHeight: Float,  // var = mutable (has getter AND setter)
+    var boxWidth: Float,
+    var xVal: Float,
+    var yVal: Float
+)
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,7 +71,8 @@ class MainActivity : ComponentActivity() {
                 {
                     //myText("welcome", 25.0, 80)
                     LiveClock()
-                    LargeBox(1000f, 750f, -1f, 750f)
+                    val mainBox = BoxConfig(1000f, 750f, -1f, 750f)
+                    myBox(config = mainBox)
                 }
         }
     }
@@ -164,26 +172,7 @@ fun LiveClock()
     }
 }
 
-    @Composable
-fun LargeBox(boxHeight:Float, boxWidth: Float, xVal:Float, yVal:Float) {
-        BoxWithConstraints(modifier = Modifier.fillMaxSize())
-        {
-            val screenWidth = constraints.maxWidth.toFloat()
-            val screenHeight = constraints.maxHeight.toFloat()
 
-            var xVar = if (xVal < 0) screenWidth / 2 - boxWidth / 2 else xVal
-            var yVar = if (yVal < 0) screenHeight / 2 - boxHeight / 2 else yVal
-
-            Canvas(modifier = Modifier.fillMaxSize())
-            {
-                drawRoundRect(
-                    color = Color.DarkGray,
-                    topLeft = Offset(xVar, yVar),
-                    size = Size(boxWidth, boxHeight),
-                    cornerRadius = CornerRadius(50f)
-                )
-            }
-        }
 
 }
 
@@ -197,11 +186,31 @@ fun updatingBox(boxHeight:Float, xVal:Float, yVal:Float)
     var height = timeDif +
 
 
-    LargeBox(boxHeight, height,  xVal, yVal)
+    myBox(boxHeight, height,  xVal, yVal)
 }
 
      */
 
+@Composable
+fun myBox(config: BoxConfig) {
+    BoxWithConstraints(modifier = Modifier.fillMaxSize())
+    {
+        val screenWidth = constraints.maxWidth.toFloat()
+        val screenHeight = constraints.maxHeight.toFloat()
+
+        var xVar = if (config.xVal < 0) screenWidth / 2 - config.boxWidth / 2 else config.xVal
+        var yVar = if (config.yVal < 0) screenHeight / 2 - config.boxHeight / 2 else config.yVal
+
+        Canvas(modifier = Modifier.fillMaxSize())
+        {
+            drawRoundRect(
+                color = Color.DarkGray,
+                topLeft = Offset(xVar, yVar),
+                size = Size(config.boxWidth, config.boxHeight),
+                cornerRadius = CornerRadius(50f)
+            )
+        }
+    }
 
 
 }
