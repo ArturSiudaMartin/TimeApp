@@ -1,52 +1,30 @@
 package com.example.timeapp
 
-internal class LinkedList {
-    private var head: Node? = null
-    private var tail: Node? = null
+class ScreenNode(val screen: Screen) {
+    var next: ScreenNode? = null
+    var prev: ScreenNode? = null
+}
 
-    private class Node
-        (var value: Int) {
-        var index: Int = 0
-        var next: Node? = null
-        var last: Node? = null
-    }
+class ScreenManager {
+    private var head: ScreenNode? = null
+    private var current: ScreenNode? = null
 
-    fun add(value: Int) {
-        val node: Node = LinkedList.Node(value)
+    fun addScreen(screen: Screen) {
+        val newNode = ScreenNode(screen)
         if (head == null) {
-            head = node
-            tail = node
+            head = newNode
+            current = head
         } else {
-            tail!!.next = node
-            node.last = tail
-            tail = node
+            var tail = head
+            while (tail?.next != null) tail = tail.next
+            tail?.next = newNode
+            newNode.prev = tail
         }
     }
 
-    fun print() {
-        var current = head
-        while (current != null) {
-            println(current.value)
-            current = current.next
-        }
-    }
-
-    fun remove(value: Int) {
-        var current = head
-        while (current != null) {
-            if (current.value == value) {
-                if (current.last != null) {
-                    current.last!!.next = current.next
-                } else {
-                    head = current.next
-                }
-                if (current.next != null) {
-                    current.next!!.last = current.last
-                } else {
-                    tail = current.last
-                }
-            }
-            current = current.next
-        }
-    }
+    fun getCurrentScreen(): Screen? = current?.screen
+    fun goNext(): Screen? { current = current?.next; return current?.screen }
+    fun goPrev(): Screen? { current = current?.prev; return current?.screen }
+    fun hasNext(): Boolean = current?.next != null
+    fun hasPrev(): Boolean = current?.prev != null
 }

@@ -46,176 +46,55 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalDensity
 import androidx.wear.compose.materialcore.screenHeightDp
 
-val cascadiamono_regular_font = FontFamily(
-    Font(R.font.cascadiamono_regular)
-)
 
-
-data class BoxConfig(
-    var boxHeight: Float,  // var = mutable (has getter AND setter)
-    var boxWidth: Float,
-    var xVal: Float,
-    var yVal: Float,
-    var boxColor: Color
-)
 
 class MainActivity : ComponentActivity() {
+    private val screenManager = ScreenManager().apply {
+        addScreen(FirstScreen())
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             TimeAppTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                )
-                {
-                    Surface(
-                        modifier = Modifier.fillMaxSize(),
-                        color = MaterialTheme.colorScheme.background
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.dotted_black_bg),
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop,
-                            alpha = 0.5F,
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    }
-                    //myText("welcome", 25.0, 80)
-                    LiveClock(0.12f, 60)
-                    LiveDate(0.80f, 50)
-                    val mainBox = BoxConfig(1000f, 750f, -1f, 750f, Color.LightGray)
-                    myBox(config = mainBox)
-                    updatingBox(mainBox)
+                var currentScreen by remember {
+                    mutableStateOf(screenManager.getCurrentScreen())
+                }
 
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    currentScreen?.Render()
                 }
             }
         }
     }
 
-    @Composable
-    fun myText(
-        text: String,
-        heightFraction: Float,  // 0f = top, 1f = bottom
-        fontSize: Int,
-        font: FontFamily,
-        color: Color = Color.White,
-        modifier: Modifier = Modifier
-    ) {
-        BoxWithConstraints(
-            modifier = modifier.fillMaxSize()
-        ) {
-            Text(
-                text = text,
-                fontFamily = font,
-                fontSize = fontSize.sp,
-                lineHeight = 50.sp,
-                textAlign = TextAlign.Center,
-                color = color,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .offset(y = maxHeight * heightFraction - fontSize.dp / 2)            )
-        }
+
+                @Composable
+                fun myText(
+                    text: String,
+                    heightFraction: Float,  // 0f = top, 1f = bottom
+                    fontSize: Int,
+                    font: FontFamily,
+                    color: Color = Color.White,
+                    modifier: Modifier = Modifier
+                ) {
+                    BoxWithConstraints(
+                        modifier = modifier.fillMaxSize()
+                    ) {
+                        Text(
+                            text = text,
+                            fontFamily = font,
+                            fontSize = fontSize.sp,
+                            lineHeight = 50.sp,
+                            textAlign = TextAlign.Center,
+                            color = color,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .offset(y = maxHeight * heightFraction - fontSize.dp / 2)
+                        )
+                    }
+                }
     }
 
 
-    fun getTime(): String {
-        val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
-        val current = LocalDateTime.now().format(formatter)
-        return current.format(formatter)
-    }
-    fun getDate(): String {
-        val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
-        return LocalDateTime.now().format(formatter)
-    }
-    @Composable
-    fun LiveClock(myHeight: Float,myFontSize:Int) {
-        var time by remember { mutableStateOf(getTime()) }
 
-        LaunchedEffect(Unit)
-        {
-            while (isActive) {
-                time = getTime()
-                delay(1000L) // update every second
-            }
-        }
-
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.TopCenter
-        )
-        {
-            myText(time, myHeight, myFontSize, cascadiamono_regular_font, Color.White)
-        }
-
-
-    }
-    @Composable
-    fun LiveDate(myHeight: Float, myFontSize:Int) {
-
-        var date by remember { mutableStateOf(getDate()) }
-
-        LaunchedEffect(Unit) {
-            while (isActive) {
-                date = getDate()
-                delay(1000L)
-            }
-        }
-
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            myText(date, myHeight, myFontSize, cascadiamono_regular_font,Color.White)
-        }
-    }
-    @Composable
-    fun updatingBox(leadBox: BoxConfig) {
-        BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
-            val screenHeightPx = constraints.maxHeight.toFloat()
-
-            val myXVal = leadBox.xVal
-            val myWidth = leadBox.boxWidth
-
-            val startOfYear = LocalDate.of(LocalDate.now().year, 1, 1)
-            val localDate = LocalDate.now()
-
-            val timeSinceStart = ChronoUnit.DAYS.between(startOfYear, localDate)
-            val perCentDone = (timeSinceStart / 365f)
-            val perCentDoneDisplay = "%.1f".format(perCentDone * 100)
-
-            val myHeigth = perCentDone * leadBox.boxHeight
-            val myYVal = leadBox.yVal + leadBox.boxHeight - myHeigth
-
-            val altBox = BoxConfig(myHeigth, myWidth, myXVal, myYVal, Color.White)
-            myBox(config = altBox)
-
-            val boxCentreFraction = (myYVal + myHeigth / 2f) / screenHeightPx
-            myText("$perCentDoneDisplay%", boxCentreFraction, 30, cascadiamono_regular_font, Color.DarkGray)
-        }
-    }
-    @Composable
-    fun myBox(config: BoxConfig) {
-        BoxWithConstraints(modifier = Modifier.fillMaxSize())
-        {
-            val screenWidth = constraints.maxWidth.toFloat()
-            val screenHeight = constraints.maxHeight.toFloat()
-
-
-            var xVar = if (config.xVal < 0) screenWidth / 2 - config.boxWidth / 2 else config.xVal
-            var yVar = if (config.yVal < 0) screenHeight / 2 - config.boxHeight / 2 else config.yVal
-
-            Canvas(modifier = Modifier.fillMaxSize())
-            {
-                drawRoundRect(
-                    color = config.boxColor,
-                    topLeft = Offset(xVar, yVar),
-                    size = Size(config.boxWidth, config.boxHeight),
-                    cornerRadius = CornerRadius(50f)
-                )
-            }
-        }
-
-
-    }
-}
