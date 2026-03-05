@@ -82,7 +82,13 @@ class FirstScreen : Screen {
             contentAlignment = Alignment.TopCenter
         )
         {
-            MyText(time, myFontSize, 0.8f,cascadiamono_regular_font, Color.White)
+            MyText(
+                text = time,
+                fontSize = myFontSize,
+                posFractionH = 0.2f,
+                font = cascadiamono_regular_font,
+                color = Color.White
+            )
         }
     }
 
@@ -102,7 +108,13 @@ class FirstScreen : Screen {
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            MyText(date, myFontSize, 0.2f,cascadiamono_regular_font, Color.White)
+            MyText(
+                text = date,
+                fontSize = myFontSize,
+                posFractionH = 0.8f,
+                font = cascadiamono_regular_font,
+                color = Color.White
+            )
         }
     }
 

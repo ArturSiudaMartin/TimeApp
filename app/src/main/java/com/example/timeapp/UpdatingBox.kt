@@ -38,10 +38,10 @@ class UpdatingBox(private val leadBox: BoxConfig) : DrawableShape {
 
             MyBox(altBox).Draw()
 
-            val boxCentreFraction = (myYVal + myHeight - 150.0f) / screenHeightPx
+            val boxCentreFraction = (myYVal + myHeight - 100.0f) / screenHeightPx
             MyText(
                 text = "$percentDoneDisplay%",
-                posFraction = boxCentreFraction,
+                posFractionH = boxCentreFraction,
                 fontSize = 30,
                 font = cascadiamono_regular_font,
                 color = Color.DarkGray
