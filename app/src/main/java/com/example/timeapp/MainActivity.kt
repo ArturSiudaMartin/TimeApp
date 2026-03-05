@@ -67,34 +67,7 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
-
-                @Composable
-                fun myText(
-                    text: String,
-                    heightFraction: Float,  // 0f = top, 1f = bottom
-                    fontSize: Int,
-                    font: FontFamily,
-                    color: Color = Color.White,
-                    modifier: Modifier = Modifier
-                ) {
-                    BoxWithConstraints(
-                        modifier = modifier.fillMaxSize()
-                    ) {
-                        Text(
-                            text = text,
-                            fontFamily = font,
-                            fontSize = fontSize.sp,
-                            lineHeight = 50.sp,
-                            textAlign = TextAlign.Center,
-                            color = color,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .offset(y = maxHeight * heightFraction - fontSize.dp / 2)
-                        )
-                    }
-                }
-    }
+}
 
 
 

@@ -23,8 +23,15 @@ class ScreenManager {
     }
 
     fun getCurrentScreen(): Screen? = current?.screen
-    fun goNext(): Screen? { current = current?.next; return current?.screen }
-    fun goPrev(): Screen? { current = current?.prev; return current?.screen }
+    fun goNext(): Screen? {
+        if (hasNext()) current = current?.next
+        return current?.screen
+    }
+
+    fun goPrev(): Screen? {
+        if (hasPrev()) current = current?.prev
+        return current?.screen
+    }
     fun hasNext(): Boolean = current?.next != null
     fun hasPrev(): Boolean = current?.prev != null
 }
