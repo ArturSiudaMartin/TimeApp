@@ -2,11 +2,14 @@ package com.example.timeapp
 
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -23,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import kotlinx.coroutines.isActive
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.unit.dp
 
 val cascadiamono_regular_font = FontFamily(
     Font(R.font.cascadiamono_regular)
@@ -34,24 +38,29 @@ class FirstScreen : Screen {
 
     @Composable
     override fun Render() {
+        var showDot by remember { mutableStateOf(false) }
+
+
         LiveClock(0.12f, 60)
         LiveDate(0.80f, 50)
-        val mainBox = BoxConfig(1000f, 750f, -1f, 750f, Color.LightGray)
-        MyBox(mainBox).Draw()
-        UpdatingBox(mainBox).Draw()
-    }
 
-    @Composable
-    override fun Button(
-        onClick: () -> Unit,
-        modifier: Modifier,
-        enabled: Boolean,
-        elevation: ButtonElevation?,
-        border: BorderStroke?,
-        contentPadding: PaddingValues,
-        interactionSource: MutableInteractionSource?,
-        content: @Composable (RowScope.() -> Unit)
-    ) {}
+        val mainBox = BoxConfig(1000f, 750f, -1f, 750f, Color.LightGray)
+
+        MyBox(mainBox, onClick = { showDot = !showDot }).Draw()
+        UpdatingBox(mainBox).Draw()
+
+        if (showDot) {
+            Box(modifier = Modifier.fillMaxSize()) {
+                Canvas(
+                    modifier = Modifier
+                        .size(20.dp)
+                        .align(Alignment.Center)
+                ) {
+                    drawCircle(color = Color.Red)
+                }
+            }
+        }
+    }
 }
 
     fun getTime(): String {

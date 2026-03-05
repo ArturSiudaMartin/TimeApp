@@ -15,16 +15,4 @@ interface Screen {
 
     @Composable
     fun Render()
-
-    @Composable
-    fun Button(
-        onClick: () -> Unit,
-        modifier: Modifier = Modifier,
-        enabled: Boolean = true,
-        elevation: ButtonElevation? = ButtonDefaults.buttonElevation(),
-        border: BorderStroke? = null,
-        contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
-        interactionSource: MutableInteractionSource? = null,
-        content: @Composable RowScope.() -> Unit
-    )
 }
