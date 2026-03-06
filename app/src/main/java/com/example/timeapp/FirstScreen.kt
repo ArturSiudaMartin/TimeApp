@@ -1,6 +1,5 @@
 package com.example.timeapp
 
-
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -28,16 +27,14 @@ import kotlinx.coroutines.isActive
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.dp
 
-
-
 class FirstScreen : Screen {
-    override val screenName = "Clock"
+    override val screenName = "YearView"
 
     @Composable
     override fun Render() {
         var showDot by remember { mutableStateOf(false) }
 
-
+        Background()
         LiveClock(0.12f, 60)
         LiveDate(0.80f, 50)
 

@@ -4,13 +4,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 
-class SecondScreen : Screen {
-    override val screenName = "YearView"
+class ThirdScreen : Screen {
+    override val screenName = "DaysView"
 
     @Composable
     override fun Render()
     {
         Background()
-        MyText(getYear(), posFractionH = 0.12f, fontSize = 60, color = Color.White )
+        MyText(getMonth(), posFractionH = 0.12f, fontSize = 60, color = Color.White )
     }
 }
+
+

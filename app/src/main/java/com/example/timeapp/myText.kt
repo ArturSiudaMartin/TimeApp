@@ -13,7 +13,7 @@ import androidx.compose.ui.layout.layout
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
-
+import com.example.timeapp.R
 
 
 @Composable
@@ -22,7 +22,7 @@ fun MyText(
     fontSize: Int = 16,
     posFractionW: Float = 0.5f,
     posFractionH: Float = 0.5f,
-    font: FontFamily = FontFamily.Default,
+    font: FontFamily = cascadiamono_regular_font,
     color: Color = Color.Black
 ) {
     BoxWithConstraints(Modifier.fillMaxSize()) {

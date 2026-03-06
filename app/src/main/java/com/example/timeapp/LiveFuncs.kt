@@ -34,7 +34,7 @@ fun LiveClock(myHeight: Float, myFontSize: Int) {
         MyText(
             text = time,
             fontSize = myFontSize,
-            posFractionH = 0.2f,
+            posFractionH = myHeight,
             font = cascadiamono_regular_font,
             color = Color.White
         )
@@ -60,7 +60,7 @@ fun LiveDate(myHeight: Float, myFontSize: Int) {
         MyText(
             text = date,
             fontSize = myFontSize,
-            posFractionH = 0.8f,
+            posFractionH = myHeight,
             font = cascadiamono_regular_font,
             color = Color.White
         )
