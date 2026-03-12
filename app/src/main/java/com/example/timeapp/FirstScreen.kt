@@ -32,28 +32,15 @@ class FirstScreen : Screen {
 
     @Composable
     override fun Render() {
-        var showDot by remember { mutableStateOf(false) }
-
         Background()
         LiveClock(0.12f, 60)
         LiveDate(0.80f, 50)
 
         val mainBox = BoxConfig(1000f, 750f, -1f, 750f, Color.LightGray)
 
-        MyBox(mainBox, onClick = { showDot = !showDot }).Draw()
+        MyBox(mainBox, onClick = {screenCounter++}).Draw()
         UpdatingBox(mainBox).Draw()
 
-        if (showDot) {
-            Box(modifier = Modifier.fillMaxSize()) {
-                Canvas(
-                    modifier = Modifier
-                        .size(20.dp)
-                        .align(Alignment.Center)
-                ) {
-                    drawCircle(color = Color.Red)
-                }
-            }
-        }
     }
 }
 
