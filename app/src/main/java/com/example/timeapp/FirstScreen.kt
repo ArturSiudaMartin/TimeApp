@@ -38,7 +38,7 @@ class FirstScreen : Screen {
 
         val mainBox = BoxConfig(1000f, 750f, -1f, 750f, Color.LightGray)
 
-        MyBox(mainBox, onClick = {screenCounter++}).Draw()
+        MyBox(mainBox, onClick = {screenCountN++}).Draw()
         UpdatingBox(mainBox).Draw()
 
     }
