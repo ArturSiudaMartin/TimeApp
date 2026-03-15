@@ -14,7 +14,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import kotlinx.coroutines.delay
 
-var myScreenCounter = screenCounter;
+var myScreenCounterN = screenCountN;
+var myScreenCounterL = screenCountL;
+
 
 class MainActivity : ComponentActivity() {
     private val screenManager = ScreenManager().apply {
@@ -32,10 +34,15 @@ class MainActivity : ComponentActivity() {
                 }
                 LaunchedEffect(Unit) {
                     while (true) {
-                        if (myScreenCounter != screenCounter) {
+                        if (myScreenCounterN != screenCountN) {
                             screenManager.goNext()
                             currentScreen = screenManager.getCurrentScreen()
-                            myScreenCounter = screenCounter
+                            myScreenCounterN = screenCountN
+                        }
+                        if (myScreenCounterL != screenCountL) {
+                            screenManager.goPrev()
+                            currentScreen = screenManager.getCurrentScreen()
+                            myScreenCounterL = screenCountL
                         }
                         delay(100) // checks every 100ms
                     }

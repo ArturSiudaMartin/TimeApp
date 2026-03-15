@@ -1,3 +1,4 @@
 package com.example.timeapp
 
-var screenCount = 0;
+var screenCountN = 0;
+var screenCountL = 0;
