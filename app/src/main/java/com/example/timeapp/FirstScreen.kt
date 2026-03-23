@@ -32,6 +32,7 @@ class FirstScreen : Screen {
             desc = "Calendar",
             align = Alignment.TopEnd,
             onClick = { screenCount++ }
-        )    }
+        )
+    }
 }
 
